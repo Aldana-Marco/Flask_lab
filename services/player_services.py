@@ -9,5 +9,34 @@ def create_player(name: str):
     player_repo.users.append(user)
     return user
 
+
 def get_players():
-    return player_repo.users
+    user_dict = {}
+    i = 0
+    for user in repository.PlayerRepository.users:
+        i += 1
+        new_dict = {"Player" + str(user.id): user.to_dict()}
+        user_dict.update(new_dict)
+    return user_dict
+
+
+def update_player(id: int, name: str):
+    modified_users_value = ""
+    for user in repository.PlayerRepository.users:
+        if user.to_dict()["id"] == id:
+            repository.PlayerRepository.users[id - 1] = Player(id, name, 0)
+            modified_users_value = modified_users_value + str(id) + ", "
+    modified_users = {"Modified users id": modified_users_value}
+    return modified_users
+
+
+def delete_player(id: int):
+    modified_users_value = ""
+    count = 0
+    for user in repository.PlayerRepository.users:
+        if user.id == id:
+            del repository.PlayerRepository.users[count]
+            modified_users_value = modified_users_value + str(id) + ", "
+        count += 1
+    modified_users = {"Modified users id": modified_users_value}
+    return modified_users

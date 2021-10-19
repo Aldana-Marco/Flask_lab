@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 
 import services.player_services as player_service
-from repositories import player_repository
 
 app = Flask(__name__)
 
@@ -17,9 +16,22 @@ def post_user():  # put application's code here
 
 @app.route('/users/list', methods=['GET'])
 def get_users():
-    for user in player_repository.PlayerRepository.users:
-        userdict = user.to_dict()
-        return jsonify(userdict)
+    user_list = player_service.get_players()
+    return jsonify(user_list)
+
+
+@app.route('/users/modify', methods=['PUT'])
+def put_user_by_id():
+    body: dict = request.get_json(force=True)
+    user = player_service.update_player(body.get("id", "default"), body.get("name", "default"))  # POST
+    return jsonify(user)
+
+
+@app.route('/users/delete', methods=['DELETE'])
+def delete_user_by_id():
+    body: dict = request.get_json(force=True)
+    user = player_service.delete_player(body.get("id", "default"))  # POST
+    return jsonify(user)
 
 
 if __name__ == '__main__':
