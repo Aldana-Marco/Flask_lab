@@ -19,6 +19,13 @@ def get_users():
     user_list = player_service.get_players()
     return jsonify(user_list)
 
+@app.route('/users/getuser', methods=['GET'])
+def get_player():
+    body: dict = request.get_json(force=True)
+    user = player_service.get_player_by_id(body.get("id", "default"))  # POST
+    return jsonify(user["name"])
+
+
 
 @app.route('/users/modify', methods=['PUT'])
 def put_user_by_id():

@@ -20,6 +20,12 @@ def get_players():
     return user_dict
 
 
+def get_player_by_id(id: int):
+    for user in repository.PlayerRepository.users:
+        if user.to_dict()["id"] == id:
+            return user.to_dict()
+
+
 def update_player(id: int, name: str):
     modified_users_value = ""
     for user in repository.PlayerRepository.users:
