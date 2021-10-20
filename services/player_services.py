@@ -11,13 +11,11 @@ def create_player(name: str):
 
 
 def get_players():
-    user_dict = {}
-    i = 0
+    users = []
     for user in repository.PlayerRepository.users:
-        i += 1
-        new_dict = {"Player" + str(user.id): user.to_dict()}
-        user_dict.update(new_dict)
-    return user_dict
+        user_to_dict = user.to_dict()
+        users.append(user_to_dict)
+    return users
 
 
 def get_player_by_id(id: int):
