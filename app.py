@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 
 import services.player_services as player_service
 from domain.constants import GET, POST, PUT, DELETE
-from domain.models import parameter_load, Parameter
+from domain.models import parameter_load
 
 app = Flask(__name__)
 
@@ -20,7 +20,7 @@ def _get_users():
         user_list = player_service.get_players()
         return jsonify(user_list)
     else:
-        app.logger.info("Executing GET list of users")
+        app.logger.info("Executing GET of the user")
         user = player_service.get_player_by_id(body.get("id", "default"))  # POST
         return jsonify(user["name"])
 
