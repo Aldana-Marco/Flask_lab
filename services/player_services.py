@@ -24,14 +24,16 @@ def get_player_by_id(id: int):
             return user.to_dict()
 
 
-def update_player(id: int, name: str):
-    modified_users_value = ""
+def update_player(list):
+    count=0
+    new_user = {element.attribute: element.value for element in list if element.attribute == "name"
+            or element.attribute == "score"}
     for user in repository.PlayerRepository.users:
-        if user.to_dict()["id"] == id:
-            repository.PlayerRepository.users[id - 1] = Player(id, name, 0)
-            modified_users_value = modified_users_value + str(id) + ", "
-    modified_users = {"Modified users id": modified_users_value}
-    return modified_users
+        if new_user.get("name")== user.name:
+            repository.PlayerRepository.users[count] = Player(user.id, new_user.name,new_user.get("score"))
+            new_user =  get_player_by_id(user.id)
+        count += 1
+    return new_user
 
 
 def delete_player(id: int):

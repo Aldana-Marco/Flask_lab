@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 
 import services.player_services as player_service
 from domain.constants import GET, POST, PUT, DELETE
+from domain.models import parameter_load, Parameter
 
 app = Flask(__name__)
 
@@ -25,8 +26,13 @@ def _get_users():
 
 
 def _put_user_by_id():
+    app.logger.info("receiving put")
     body: dict = request.get_json()
-    user = player_service.update_player(body.get("id", "default"), body.get("name", "default"))  # POST
+    parameter_list = []
+    for parameter in body:
+        parameter_obj = parameter_load(parameter)
+        parameter_list.append(parameter_obj)
+    user = player_service.update_player(parameter_list)
     return jsonify(user)
 
 
@@ -34,6 +40,7 @@ def _delete_user_by_id():
     body: dict = request.get_json()
     user = player_service.delete_player(body.get("id", "default"))  # POST
     return jsonify(user)
+
 
 # endpoint
 @app.route('/users', methods=['GET', 'POST', 'PUT', 'DELETE'])  # users and endpoints are in plural
