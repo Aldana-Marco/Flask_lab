@@ -11,17 +11,17 @@ def create_player(name: str):
 
 
 def get_players():
-    #users = []
-    #for user in repository.PlayerRepository.users:
+    # users = []
+    # for user in repository.PlayerRepository.users:
     #    user_to_dict = user
     #    users.append(user_to_dict)
     return repository.PlayerRepository.users
 
 
 def get_player_by_id(player_id: int):
-    for user in repository.PlayerRepository.users:
-        if user.id == player_id:
-            return user
+    for player in repository.PlayerRepository.users:
+        if player.id == player_id:
+            return player
 
 
 def patch_player(attribute, id):

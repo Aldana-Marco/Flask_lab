@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request  #
 
 import services.player_services as player_service
 from domain.json.schemas import PlayerSchema
@@ -23,8 +23,8 @@ def _get_users():
         users = []
         player_schema = PlayerSchema()
         for user in user_list:
-           user_to_dict = player_schema.dump(user)
-           users.append(user_to_dict)
+            user_to_dict = player_schema.dump(user)
+            users.append(user_to_dict)
         return jsonify(users)
     else:
         app.logger.info("Executing GET of the user")
@@ -40,12 +40,13 @@ def _patch_user_by_id(id):
     for parameter in body:
         parameter_obj = parameter_load(parameter)
         parameter_list.append(parameter_obj)
-    user = player_service.patch_player(parameter_list, id)
-    return jsonify(user)
+    player_service.patch_player(parameter_list, id)
+    player = player_service.get_player_by_id(id)
+    return jsonify(player.to_dict())
 
 
-@app.route("/users/<id:int>", methods=["DELETE"])
-def _delete_user_by_id():
+@app.route("/users/<int:id>", methods=["DELETE"])
+def _delete_user_by_id(id):
     body: dict = request.get_json()
     user = player_service.delete_player(body.get("id", "default"))  # POST
     return jsonify(user)
