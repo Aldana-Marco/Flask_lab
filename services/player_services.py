@@ -40,5 +40,4 @@ def delete_player(id: int):
         if player.id == id:
             del repository.PlayerRepository.users[index]
             return player
-        else:
-            return 'User not found'
+    return 'User not found'

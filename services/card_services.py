@@ -43,6 +43,5 @@ def delete_card(card_id: int):
         if card.id == card_id:
             del repository.CardRepository.cards[index]
             return card
-        else:
-            return 'User not found'
+    return 'User not found'
 

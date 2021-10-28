@@ -18,10 +18,7 @@ class Parameter():
 
 
 def parameter_load(dictionary: dict):
-    if dictionary.get("attribute", "") != "" and dictionary.get("value", "") != "":
-        return Parameter(dictionary.get("attribute"), dictionary.get("value"))
-    else:
-        raise Exception()
+    return Parameter(dictionary.get("attribute"), dictionary.get("value"))
 
 
 class Player:

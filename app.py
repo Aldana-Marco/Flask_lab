@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request  #
 
 import services.player_services as player_service
-from domain.json.schemas import PlayerSchema, CardSchema
+from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
 from domain.models import parameter_load
 import services.db_connect as db_connection
 
@@ -12,15 +12,16 @@ from services import card_services
 app = Flask(__name__)
 app.debug = True
 db_connect = db_connection.connection()
-player_schema = PlayerSchema()
-card_schema = CardSchema()
+player_schema = PlayerSchema(partial=['id', 'name', 'score'])
+card_schema = CardSchema(partial=['id'])
+parameter_schema = ParameterLoadSchema()
 
 
 # Player Methods--------------------------------------------------------------------------------------------------------
 @app.route("/users", methods=["POST"])
-def _post_user():  # put application's code here
-    body: dict = request.get_json()
-    user = player_service.create_player(body.get("name", "default"))  # POST
+def _post_user():
+    player = player_schema.load(request.get_json())
+    user = player_service.create_player(player.get("name"))  # POST
     return jsonify(player_schema.dump(user))
 
 
@@ -42,10 +43,9 @@ def _get_user(user_id):
 
 @app.route("/users/<int:user_id>", methods=["PATCH"])
 def _patch_user_by_id(user_id):
-    app.logger.info("receiving put")
-    body: dict = request.get_json()
+    parameters = parameter_schema.load(request.get_json(), many=True)
     parameter_list = []
-    for parameter in body:
+    for parameter in parameters:
         parameter_obj = parameter_load(parameter)
         parameter_list.append(parameter_obj)
     player_service.patch_player(parameter_list, user_id)
@@ -65,10 +65,10 @@ def _delete_user_by_id(user_id):
 # Cards methods---------------------------------------------------------------------------------------------------------
 @app.route("/cards", methods=["POST"])
 def _post_card():
-    body: dict = request.get_json()
-    card = card_services.create_card(body.get("name", "default"), body.get("attack", "default", ),
-                                     body.get("defense", "default"))
+    card = card_schema.load(request.get_json())
+    card = card_services.create_card(card.get("name"), card.get("attack"), card.get("defense"))
     return jsonify(card_schema.dump(card))
+
 
 @app.route("/cards", methods=["GET"])
 def _get_cards():
@@ -79,21 +79,24 @@ def _get_cards():
         cards.append(card_to_dict)
     return jsonify(cards)
 
+
 @app.route("/cards/<int:card_id>", methods=["GET"])
 def _get_card(card_id):
     card = card_services.get_card_by_id(card_id)  # POST
     return jsonify(card_schema.dump(card))
 
+
 @app.route("/cards/<int:card_id>", methods=["PATCH"])
 def _patch_card_by_id(card_id):
-    body: dict = request.get_json()
+    parameters = parameter_schema.load(request.get_json(), many=True)
     parameter_list = []
-    for parameter in body:
+    for parameter in parameters:
         parameter_obj = parameter_load(parameter)
         parameter_list.append(parameter_obj)
     card_services.patch_card(parameter_list, card_id)
     card = card_services.get_card_by_id(card_id)
     return jsonify(card_schema.dump(card))
+
 
 @app.route("/cards/<int:card_id>", methods=["DELETE"])
 def _delete_card_by_id(card_id):
@@ -102,6 +105,7 @@ def _delete_card_by_id(card_id):
         return jsonify(card_schema.dump(card))
     else:
         return jsonify({"Status": "Card not found"})
+
 
 # Start-----------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
