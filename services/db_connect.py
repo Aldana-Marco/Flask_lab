@@ -14,4 +14,3 @@ def connection():
         return connect
     except:
         return 'connection failed'
-

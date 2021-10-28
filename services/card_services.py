@@ -16,7 +16,6 @@ def create_card(name: str, attack: int, defense: int):
     return card
 
 
-
 def get_cards():
     return repository.CardRepository.cards
 
@@ -44,4 +43,3 @@ def delete_card(card_id: int):
             del repository.CardRepository.cards[index]
             return card
     return 'User not found'
-

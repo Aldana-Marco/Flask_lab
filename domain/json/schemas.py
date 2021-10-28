@@ -8,12 +8,12 @@ class PlayerSchema(Schema):
 
 
 class CardSchema(Schema):
-    id=fields.Int(required=True)
-    name=fields.Str(required=True)
-    attack=fields.Int(required=True)
-    defense=fields.Int(required=True)
+    id = fields.Int(required=True)
+    name = fields.Str(required=True)
+    attack = fields.Int(required=True)
+    defense = fields.Int(required=True)
+
 
 class ParameterLoadSchema(Schema):
-    attribute=fields.Str(required=True)
-    value=fields.Field(required=True )
-
+    attribute = fields.Str(required=True)
+    value = fields.Field(required=True)

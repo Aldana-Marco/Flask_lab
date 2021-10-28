@@ -7,8 +7,8 @@ player_repo = repository.PlayerRepository()
 def create_player(name: str):
     user = Player(1, "", 0)
     if len(player_repo.users) > 0:
-        last_player=player_repo.users[-1]
-        user = Player( last_player.id+1, name, 0)
+        last_player = player_repo.users[-1]
+        user = Player(last_player.id + 1, name, 0)
     else:
         user = Player(1, name, 0)
     player_repo.users.append(user)
