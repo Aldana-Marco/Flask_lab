@@ -1,0 +1,2 @@
+class CardRepository():
+    cards = []

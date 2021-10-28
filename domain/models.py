@@ -1,8 +1,11 @@
 from typing import Dict
+from marshmallow import Schema, fields
 
 
 class Card(object):
-    def __init__(self, attack: int, defense: int):
+    def __init__(self, id: int, name: str, attack: int, defense: int):
+        self.id = id
+        self.name = name
         self.attack = attack
         self.defense = defense
 
@@ -15,7 +18,6 @@ class Parameter():
 
 
 def parameter_load(dictionary: dict):
-    x = 0
     if dictionary.get("attribute", "") != "" and dictionary.get("value", "") != "":
         return Parameter(dictionary.get("attribute"), dictionary.get("value"))
     else:
@@ -35,3 +37,9 @@ class Player:
         :return: Dict
         """
         return {"id": self.id, "name": self.name, "score": self.score}
+
+
+class CardXPlayer:
+    def __init__(self, card_id: int, player_id: int):
+        self.card_id = card_id
+        self.player_id = player_id
