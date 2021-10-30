@@ -4,62 +4,59 @@ from flask import Flask, jsonify, request  #
 import services.player_services as player_service
 from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
 from domain.models import parameter_load
-import services.db_connect as db_connection
-
-# Global Variables and Cons---------------------------------------------------------------------------------------------
+import configuration.db_connect as db_connect
 from services import card_services
 
+# Global Variables and Cons---------------------------------------------------------------------------------------------
+db_connect.database_connection()
 app = Flask(__name__)
+
 app.debug = True
-db_connect = db_connection.connection()
-player_schema = PlayerSchema(partial=['id', 'name', 'score'])
+player_schema = PlayerSchema(partial=['id', 'name', 'score'])  #
 card_schema = CardSchema(partial=['id'])
 parameter_schema = ParameterLoadSchema()
 
 
 # Player Methods--------------------------------------------------------------------------------------------------------
 @app.route("/users", methods=["POST"])
-def _post_user():
+def _post_player():
     player = player_schema.load(request.get_json())
-    user = player_service.create_player(player.get("name"))  # POST
-    return jsonify(player_schema.dump(user))
-
-
-@app.route("/users", methods=["GET"])
-def _get_users():
-    user_list = player_service.get_players()
-    users = []
-    for user in user_list:
-        user_to_dict = player_schema.dump(user)
-        users.append(user_to_dict)
-    return jsonify(users)
-
-
-@app.route("/users/<int:user_id>", methods=["GET"])
-def _get_user(user_id):
-    user = player_service.get_player_by_id(user_id)  # POST
-    return jsonify(player_schema.dump(user))
-
-
-@app.route("/users/<int:user_id>", methods=["PATCH"])
-def _patch_user_by_id(user_id):
-    parameters = parameter_schema.load(request.get_json(), many=True)
-    parameter_list = []
-    for parameter in parameters:
-        parameter_obj = parameter_load(parameter)
-        parameter_list.append(parameter_obj)
-    player_service.patch_player(parameter_list, user_id)
-    player = player_service.get_player_by_id(user_id)
+    player = player_service.create_player(player.get("name"))  # POST
     return jsonify(player_schema.dump(player))
 
 
-@app.route("/users/<int:user_id>", methods=["DELETE"])
-def _delete_user_by_id(user_id):
-    user = player_service.delete_player(user_id)  # POST
-    if user != 'User not found':
-        return jsonify(player_schema.dump(user))
+@app.route("/users", methods=["GET"])
+def _get_players():
+    player_list = player_service.get_players()  # homework multi/many dump // schema = UserSchema(many=True)
+    player_to_dict = player_schema.dump(player_list, many=True)
+    return jsonify(player_to_dict)
+
+
+@app.route("/users/<int:player_id>", methods=["GET"])
+def _get_player(player_id):
+    player = player_service.get_player_by_id(player_id)
+    return jsonify(player_schema.dump(player))
+
+
+@app.route("/users/<int:player_id>", methods=["PATCH"])
+def _patch_player_by_id(player_id):
+    parameters = parameter_schema.load(request.get_json(), many=True)
+    parameter_list = []
+    for parameter in parameters:
+        parameter_obj = parameter_load(parameter)  # do validation in json without create an object
+        parameter_list.append(parameter_obj)
+    player_service.patch_player(parameter_list, player_id)
+    player = player_service.get_player_by_id(player_id)  # homework should be in player method
+    return jsonify(player_schema.dump(player))
+
+
+@app.route("/users/<int:player_id>", methods=["DELETE"])
+def _delete_player_by_id(player_id):
+    player = player_service.delete_player(player_id)
+    if player != 'Player not found':
+        return jsonify(player_schema.dump(player))
     else:
-        return jsonify({"Status": "User not found"})
+        return jsonify({"Status": "Player not found"})
 
 
 # Cards methods---------------------------------------------------------------------------------------------------------

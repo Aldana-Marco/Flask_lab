@@ -1,17 +1,15 @@
 from typing import Dict
-from marshmallow import Schema, fields
 
 
 class Card(object):
-    def __init__(self, id: int, name: str, attack: int, defense: int):
-        self.id = id
+    def __init__(self, card_id: int, name: str, attack: int, defense: int):
+        self.id = card_id
         self.name = name
         self.attack = attack
         self.defense = defense
 
 
-class Parameter():
-
+class Parameter:
     def __init__(self, attribute: str, value: str):
         self.attribute = attribute
         self.value = value
@@ -23,8 +21,8 @@ def parameter_load(dictionary: dict):
 
 class Player:
 
-    def __init__(self, id: int, name: str, score: float):
-        self.id = id
+    def __init__(self, player_id: int, name: str, score: float):
+        self.id = player_id
         self.name = name
         self.score = score
 

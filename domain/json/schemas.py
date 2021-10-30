@@ -1,6 +1,9 @@
 from marshmallow import Schema, fields
 
 
+# Homework, see the "validate="
+
+
 class PlayerSchema(Schema):
     id = fields.Int(required=True)
     name = fields.Str(required=True)
