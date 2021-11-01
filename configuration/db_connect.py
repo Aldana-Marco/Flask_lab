@@ -1,8 +1,7 @@
 import logging
-
 import pyodbc
+from flask.globals import g
 
-db_connection = ""
 logger = logging.getLogger("db_connect message: ")
 
 
@@ -15,8 +14,7 @@ def database_connection():
     try:
         connect = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL server}; SERVER=' + server + ';DATABASE=' +
                                  db + ';UID=' + user + ';PWD=' + password)
-        # Solution
-        global db_connection
-        db_connection = connect
+        g.db_connection = connect
+        return g.db_connection
     except Exception as ex:
         logger.info(ex)

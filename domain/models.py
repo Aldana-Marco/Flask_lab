@@ -1,3 +1,6 @@
+"""
+Object classes models
+"""
 from typing import Dict
 
 

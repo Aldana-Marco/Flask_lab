@@ -1,16 +1,13 @@
-from domain.models import Player
+"""
+
+"""
 import repositories.player_repository as repository
 
 player_repo = repository.PlayerRepository()
 
 
 def create_player(name: str):
-    if len(player_repo.players) > 0:
-        last_player = player_repo.players[-1]
-        player = Player(last_player.id + 1, name, 0)
-    else:
-        player = Player(1, name, 0)
-    player_repo.players.append(player)
+    player = repository.PlayerRepository().insert_player(name, 0)
     return player
 
 
@@ -19,25 +16,24 @@ def get_players():
 
 
 def get_player_by_id(player_id: int):
-    for player in repository.PlayerRepository.players:
-        if player.id == player_id:
-            return player
+    return repository.PlayerRepository().select_player_by_id(player_id)
 
 
 def patch_player(attribute, player_id):
-    new_player = {element.attribute: element.value for element in attribute if element.attribute == "name"
-                  or element.attribute == "score"}
-    for index, player in enumerate(repository.PlayerRepository.players):
-        if player_id == player.id:
-            repository.PlayerRepository.players[index] = Player(player.id, new_player.get("name"),
-                                                                new_player.get("score"))
-            new_player = get_player_by_id(player.id)
-    return new_player
+    # To review -> data validation, what if the attributes aren´t PlayerName or PlayerScore?
+    # dict comprehension
+    new_player = {
+        element["attribute"]: element["value"]
+        for element in attribute
+        if element["attribute"] == "PlayerName"
+           or element["attribute"] == "PlayerScore"
+    }
+    repository.PlayerRepository().update_player_score(new_player, player_id)
+    return get_player_by_id(player_id)
 
 
-def delete_player(player_id: int):
-    for index, player in enumerate(repository.PlayerRepository.players):
-        if player.id == player_id:
-            del repository.PlayerRepository.players[index]
-            return player
-    return 'User not found'
+def delete_player_by_id(player_id: int):
+    player = get_player_by_id(player_id)
+    if player:
+        repository.PlayerRepository().delete_player(player_id)
+    return player
