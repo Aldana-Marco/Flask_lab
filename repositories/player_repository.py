@@ -1,5 +1,5 @@
 import logging
-from flask.globals import g
+from flask import g
 from repositories.sql.player_sql import SQL_SELECT_ALL, SQL_INSERT_PLAYER, SQL_SELECT_PLAYER, PLAYER_PROPERTIES
 from domain.json.schemas import PlayerSchema
 
@@ -33,20 +33,31 @@ class PlayerRepository:
         with g.db_connection.cursor() as cursor:
             cursor.execute(SQL_SELECT_PLAYER.format(player_id))
             sql_result = cursor.fetchone()
-            players = player_schema.load(dict(zip(PLAYER_PROPERTIES, sql_result)))
-            return players
+            if sql_result:
+                players = player_schema.load(dict(zip(PLAYER_PROPERTIES, sql_result)))
+                return players
+            else:
+                return "Player not found"
 
     def update_player_score(self, parameter_dict: dict, id_player: int):
         with g.db_connection.cursor() as cursor:
             columns = []
             for parameter, value in parameter_dict.items():
-                columns.append(f"{parameter} = '{value}'")
+                if parameter == "PlayerName" or parameter == "PlayerScore":
+                    columns.append(f"{parameter} = '{value}'")
             cursor.execute(f"UPDATE Player SET {' , '.join(columns)} WHERE IdPLayer={id_player};")  # homework Study
             cursor.commit()
             logger.info("UpdatePlayerScore Successful")
 
     def delete_player(self, id_player: int):
         with g.db_connection.cursor() as cursor:
-            cursor.execute(f"DELETE FROM Player WHERE IdPLayer={id_player}")
-            cursor.commit()
-            logger.info("DeletePlayer Successful")
+            cursor.execute(SQL_SELECT_PLAYER.format(id_player))
+            sql_result = cursor.fetchone()
+            if sql_result:
+                cursor.execute(f"DELETE FROM Player WHERE IdPLayer={id_player}")
+                cursor.commit()
+                logger.info("DeletePlayer Successful")
+                return sql_result
+            else:
+                logger.info("DeletePlayer Failed")
+                return "Delete Player Failed"

@@ -20,8 +20,6 @@ parameter_schema = ParameterLoadSchema()
 
 
 # Player Methods--------------------------------------------------------------------------------------------------------
-# partial solution
-# @app.before_first_request
 @app.before_request
 def db():
     db_connect.database_connection()
@@ -29,34 +27,46 @@ def db():
 
 @app.route("/users", methods=["POST"])
 def _post_player():
-    player = PlayerSchema(partial=('id', 'score')).load(request.get_json())
-    player = player_service.create_player(player.get("name"))
+    player = PlayerSchema(partial=('IdPlayer', 'PlayerScore')).load(request.get_json())
+    player = player_service.create_player(player.get("PlayerName"))
     return jsonify(player_schema.dump(player))
 
 
 @app.route("/users", methods=["GET"])
 def _get_players():
-    player_list = player_service.get_players()  # homework multi/many dump // schema = UserSchema(many=True)
+    player_list = player_service.get_players()
     return jsonify(player_schema.dump(player_list, many=True))
 
 
 @app.route("/users/<int:player_id>", methods=["GET"])
 def _get_player_by_id(player_id):  # pending
-    player_list = player_service.get_player_by_id(player_id)
-    return jsonify(player_schema.dump(player_list))
+    response = player_service.get_player_by_id(player_id)
+    player_list = player_schema.dump(response)
+    if player_list:
+        return jsonify(player_list)
+    else:
+        return jsonify(response)
 
 
 @app.route("/users/<int:player_id>", methods=["PATCH"])
 def _patch_player_by_id(player_id):
     parameters = parameter_schema.load(request.get_json(), many=True)
-    player = player_service.patch_player(parameters, player_id)
-    return jsonify(player)
+    response = player_service.patch_player(parameters, player_id)
+    player = player_schema.dump(response)
+    if player:
+        return jsonify(player)
+    else:
+        return jsonify(response)
 
 
 @app.route("/users/<int:player_id>", methods=["DELETE"])
 def _delete_player_by_id(player_id):  # pending because get_player_by_id
-    player = player_service.delete_player_by_id(player_id)
-    return jsonify(player)
+    response = player_service.delete_player_by_id(player_id)
+    player = player_schema.dump(response)
+    if player:
+        return jsonify(player)
+    else:
+        return jsonify(response)
 
 
 # Cards methods---------------------------------------------------------------------------------------------------------

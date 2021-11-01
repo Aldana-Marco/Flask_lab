@@ -6,9 +6,9 @@ from marshmallow import Schema, fields
 
 # Homework, see the "validate="
 class PlayerSchema(Schema):
-    id = fields.Int(required=True)
-    name = fields.Str(required=True)
-    score = fields.Float(required=True)
+    IdPlayer = fields.Int(required=True)
+    PlayerName = fields.Str(required=True)
+    PlayerScore = fields.Float(required=True)
 
 
 class CardSchema(Schema):

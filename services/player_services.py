@@ -2,7 +2,7 @@
 
 """
 import repositories.player_repository as repository
-
+from domain.json.schemas import PlayerSchema
 player_repo = repository.PlayerRepository()
 
 
@@ -28,12 +28,21 @@ def patch_player(attribute, player_id):
         if element["attribute"] == "PlayerName"
            or element["attribute"] == "PlayerScore"
     }
+    new_player["IdPlayer"] = player_id
+    try:
+        PlayerSchema().load(new_player,partial="IdPlayer")
+    except:
+        return "Bad Request, input data not valid"
+
     repository.PlayerRepository().update_player_score(new_player, player_id)
     return get_player_by_id(player_id)
 
 
+
 def delete_player_by_id(player_id: int):
-    player = get_player_by_id(player_id)
-    if player:
-        repository.PlayerRepository().delete_player(player_id)
-    return player
+    response = get_player_by_id(player_id)
+    if response != "Player not found":
+        player = repository.PlayerRepository().delete_player(player_id)
+        return player
+    else:
+        return response
