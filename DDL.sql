@@ -42,6 +42,16 @@ CREATE TABLE [dbo].[PlayerXCard](
 )
 GO
 
+CREATE TABLE [dbo].[Audit](
+	[IdAudit] [int] IDENTITY NOT NULL,
+	[Request][varchar](MAX) NOT NULL,
+	[Time] [datetime] NOT NULL,
+	[IdSession] [varchar](MAX) NOT NULL,
+	[Status] [varchar](MAX) NULL
+	PRIMARY KEY ([IdAudit])
+)
+GO
+
 ALTER TABLE	[PlayerXCard]
 	ADD CONSTRAINT [FK_PlayerXCard_Card]
 	FOREIGN KEY ([IdCard]) 
@@ -59,8 +69,11 @@ GO
  FOR [PlayerScore]
  GO
 
+ 
+ SELECT IdPlayer FROM Player;
+ SELECT TOP 1 [IdPlayer], [PlayerName], [PLayerScore] FROM Player ORDER BY IdPlayer DESC
 
-
+SELECT [IdPlayer], [PlayerName], [PlayerScore] FROM Player WHERE [IdPlayer] = (SELECT MAX([IdPlayer]) FROM Player)
 
 SELECT 
     DB_NAME(dbid) as DBName, 
@@ -78,3 +91,11 @@ GROUP BY
 	SELECT [IdPlayer] from Player Where [IdPlayer] = 2
 
 	UPDATE Player SET PlayerName = 'UserPatched' , PlayerScore = '5' WHERE IdPLayer=3;
+
+INSERT [dbo].[Audit] ( [Request],[Time], [IdSession], [Exception]) 
+VALUES ('127.0.0.1 - http://127.0.0.1:5000/users - POST - {''PlayerName'': ''User''}',
+convert(datetime,'2021-11-04 02:17:10'),'9b89b9a1-3d47-11ec-8371-cc483a4ec252','None')
+
+Select * from [Audit]
+
+

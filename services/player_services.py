@@ -1,14 +1,19 @@
 """
 
 """
+from flask_sqlalchemy import SQLAlchemy
+import app
+
 import repositories.player_repository as repository
 from domain.json.schemas import PlayerSchema
 player_repo = repository.PlayerRepository()
 
+player_schema=PlayerSchema()
+
+
 
 def create_player(name: str):
-    player = repository.PlayerRepository().insert_player(name, 0)
-    return player
+    return repository.PlayerRepository().insert_player(name, 0)
 
 
 def get_players():
@@ -16,6 +21,7 @@ def get_players():
 
 
 def get_player_by_id(player_id: int):
+
     return repository.PlayerRepository().select_player_by_id(player_id)
 
 

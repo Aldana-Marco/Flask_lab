@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="Branch features/db/row created">
-      <change afterPath="$PROJECT_DIR$/DDL.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/configuration/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DDL.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DDL.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/sql/player_sql.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/sql/player_sql.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +46,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\Flask_lab\repositories\sql" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="app.py" type="PythonConfigurationType" factoryName="Python">
@@ -122,6 +135,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/services/player_services.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

@@ -1,35 +1,68 @@
 """
 Main app where we make inputs and outputs with the user, all by method calls
 """
-
 # imports---------------------------------------------------------------------------------------------------------------
-from flask import Flask, jsonify, request
+import datetime
+import uuid
+from flask import Flask, jsonify, request, g
+from sqlalchemy.orm import Session
 
 import services.player_services as player_service
+from configuration.db_connect import database_connection_alchemy
 from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
 from domain.models import parameter_load
-import configuration.db_connect as db_connect
+from repositories.sql.player_sql import SQL_INSERT_AUDIT, SQL_UPDATE_AUDIT_STATUS
 from services import card_services
 
 # Global Variables and Cons---------------------------------------------------------------------------------------------
 app = Flask(__name__)
 app.debug = True
+
+# initializing objects--------------------------------------------------------------------------------------------------
 player_schema = PlayerSchema()
 card_schema = CardSchema()
 parameter_schema = ParameterLoadSchema()
 
 
-# Player Methods--------------------------------------------------------------------------------------------------------
+# Player Before/After Methods-------------------------------------------------------------------------------------------
 @app.before_request
-def db():
-    db_connect.database_connection()
+def before_request_func():
+    print("Initializing request!")
+    #declare request details
+    request_details = str(request.remote_addr) + " - " + str(request.url) + " - " + str(request.method) + " - " + \
+                        str(request.get_json())
+    request_details = request_details.replace("'", "''")
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    g.id_session = uuid.uuid1()
+    g.status="Requested"
+    #event for request details in a db
+    g.db_connection = Session(database_connection_alchemy())
+    g.db_connection.execute(SQL_INSERT_AUDIT.format(request_details, time, g.id_session, g.status))
+    g.db_connection.commit()
+    print("Request is running...")
 
 
+@app.teardown_request
+def teardown_request_func(error):
+    if error:
+        g.status = error
+        print(str(error))
+    else:
+        g.status = "Done!"
+    g.db_connection.execute(SQL_UPDATE_AUDIT_STATUS.format(g.status, g.id_session))
+    g.db_connection.commit()
+    print("closing database...")
+    if getattr(g, "db_connection", None):
+        g.db_connection.close()
+        print("closing program...")
+
+
+# Player Request Methods------------------------------------------------------------------------------------------------
 @app.route("/users", methods=["POST"])
 def _post_player():
     player = PlayerSchema(partial=('IdPlayer', 'PlayerScore')).load(request.get_json())
-    player = player_service.create_player(player.get("PlayerName"))
-    return jsonify(player_schema.dump(player))
+    player_query = player_service.create_player(player.get("PlayerName"))
+    return jsonify(player_schema.dump(player_query, many=True))
 
 
 @app.route("/users", methods=["GET"])
@@ -39,34 +72,34 @@ def _get_players():
 
 
 @app.route("/users/<int:player_id>", methods=["GET"])
-def _get_player_by_id(player_id):  # pending
-    response = player_service.get_player_by_id(player_id)
-    player_list = player_schema.dump(response)
+def _get_player_by_id(player_id):
+    player_query = player_service.get_player_by_id(player_id)
+    player_list = player_schema.dump(player_query)
     if player_list:
-        return jsonify(player_list)
+        return jsonify(player_schema.dump(player_list, many=True))
     else:
-        return jsonify(response)
+        return jsonify(player_query)
 
 
 @app.route("/users/<int:player_id>", methods=["PATCH"])
 def _patch_player_by_id(player_id):
     parameters = parameter_schema.load(request.get_json(), many=True)
-    response = player_service.patch_player(parameters, player_id)
-    player = player_schema.dump(response)
+    player_query = player_service.patch_player(parameters, player_id)
+    player = player_schema.dump(player_query)
     if player:
-        return jsonify(player)
+        return jsonify(player_schema.dump(player, many=True))
     else:
-        return jsonify(response)
+        return jsonify(player_query)
 
 
 @app.route("/users/<int:player_id>", methods=["DELETE"])
 def _delete_player_by_id(player_id):  # pending because get_player_by_id
-    response = player_service.delete_player_by_id(player_id)
-    player = player_schema.dump(response)
+    player_query = player_service.delete_player_by_id(player_id)
+    player = player_schema.dump(player_query)
     if player:
-        return jsonify(player)
+        return jsonify(player_schema.dump(player, many=True))
     else:
-        return jsonify(response)
+        return jsonify(player_query)
 
 
 # Cards methods---------------------------------------------------------------------------------------------------------
