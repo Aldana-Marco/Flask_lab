@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="Branch features/db/row created">
-      <change afterPath="$PROJECT_DIR$/configuration/constants.py" afterDir="false" />
+    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DDL.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DDL.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repositories/sql/player_sql.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/sql/player_sql.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -112,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635803980613</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db">
+      <created>1636016425520</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1636016425520</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,17 +135,11 @@
     <MESSAGE value="First implementation of database on select_player method" />
     <MESSAGE value="First implementation of database in all player methods" />
     <MESSAGE value="Branch features/db/row created" />
-    <option name="LAST_COMMIT_MESSAGE" value="Branch features/db/row created" />
+    <MESSAGE value="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/services/player_services.py</url>
-          <line>15</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

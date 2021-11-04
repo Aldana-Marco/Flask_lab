@@ -17,7 +17,6 @@ from services import card_services
 # Global Variables and Cons---------------------------------------------------------------------------------------------
 app = Flask(__name__)
 app.debug = True
-
 # initializing objects--------------------------------------------------------------------------------------------------
 player_schema = PlayerSchema()
 card_schema = CardSchema()
@@ -28,14 +27,14 @@ parameter_schema = ParameterLoadSchema()
 @app.before_request
 def before_request_func():
     print("Initializing request!")
-    #declare request details
-    request_details = str(request.remote_addr) + " - " + str(request.url) + " - " + str(request.method) + " - " + \
-                        str(request.get_json())
-    request_details = request_details.replace("'", "''")
+    # declare request details
+    request_details = str(request.remote_addr) + " - " + str(request.url) + " - " + str(request.method) + " - " \
+                      + str(request.get_json())
+    request_details = request_details.replace("'", "''")  # to avoid errors by ' in database insert
     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     g.id_session = uuid.uuid1()
-    g.status="Requested"
-    #event for request details in a db
+    g.status = "Requested"
+    # create a log in database
     g.db_connection = Session(database_connection_alchemy())
     g.db_connection.execute(SQL_INSERT_AUDIT.format(request_details, time, g.id_session, g.status))
     g.db_connection.commit()
@@ -44,8 +43,9 @@ def before_request_func():
 
 @app.teardown_request
 def teardown_request_func(error):
+    # update status in database log
     if error:
-        g.status = error
+        g.status = str(error).replace("'", "''")  # to avoid errors by ' in database insert
         print(str(error))
     else:
         g.status = "Done!"
@@ -102,7 +102,7 @@ def _delete_player_by_id(player_id):  # pending because get_player_by_id
         return jsonify(player_query)
 
 
-# Cards methods---------------------------------------------------------------------------------------------------------
+# Cards  Request methods------------------------------------------------------------------------------------------------
 @app.route("/cards", methods=["POST"])
 def _post_card():
     card = card_schema.load(request.get_json())
