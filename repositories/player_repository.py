@@ -1,4 +1,5 @@
 from flask import g
+from sqlalchemy.orm import Session
 
 from repositories.sql.player_sql import *
 from domain.json.schemas import PlayerSchema
@@ -8,15 +9,18 @@ class PlayerRepository:
     players = []
 
     def _query(self, sql_request: str, commit_required: bool, return_required: bool):
-        sql_result = g.db_connection.execute(sql_request)
-        if commit_required:  # Execute only when we need to insert or modify a value in Database
-            g.db_connection.commit()
-        players_list = []
-        if return_required:  # Execute if we need a return value
-            for row in sql_result.fetchall():
-                players_list.append(dict(zip(PLAYER_PROPERTIES, row)))
-            players = PlayerSchema().load(players_list, many=True)
-            return players
+        with g.engine.begin() as connection:
+            sql_result = connection.execute(sql_request)
+            if commit_required:  # Execute only when we need to insert or modify a value in Database
+                session = Session(g.engine)
+                session.commit()
+                session.close()
+            players_list = []
+            if return_required:  # Execute if we need a return value
+                for row in sql_result.fetchall():
+                    players_list.append(dict(zip(PLAYER_PROPERTIES, row)))
+                players = PlayerSchema().load(players_list, many=True)
+                return players
 
     def insert_player(self, name: str, score: int):
         self._query(SQL_INSERT_PLAYER.format(name, score), True, False)
@@ -33,7 +37,7 @@ class PlayerRepository:
         for parameter, value in parameter_dict.items():
             if parameter == "PlayerName" or parameter == "PlayerScore":
                 new_player_parameters.append(f"{parameter} = '{value}'")
-        self._query(f"UPDATE Player SET {' , '.join(new_player_parameters)} WHERE IdPLayer={id_player};", True, False)
+        self._query(f"UPDATE Players SET {' , '.join(new_player_parameters)} WHERE IdPLayer={id_player};", True, False)
         return self.select_player_by_id(id_player)
 
     def delete_player(self, id_player: int):

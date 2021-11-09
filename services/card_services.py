@@ -1,19 +1,12 @@
 # ----------------------------------------------------------------------------------------------------------------------
-from domain.models import Card
 import repositories.card_repository as repository
+from domain.json.schemas import CardSchema
 
 card_repo = repository.CardRepository()
 
 
-def create_card(name: str, attack: int, defense: int):
-    card = Card(1, "", 0, 0)
-    if len(card_repo.cards) > 0:
-        last_card = card_repo.cards[-1]
-        card = Card(last_card.id + 1, name, attack, defense)
-    else:
-        card = Card(1, name, attack, defense)
-    card_repo.cards.append(card)
-    return card
+def create_card(name: str, attack:int, defense:int, image):
+    return repository.CardRepository().insert_card(name, attack,defense,image)
 
 
 def get_cards():

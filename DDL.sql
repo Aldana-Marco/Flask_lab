@@ -17,7 +17,7 @@ EXEC sp_addsrvrolemember
 USE [CardsGame]
 GO
 
-CREATE TABLE [dbo].[Player](
+CREATE TABLE [dbo].[Players](
 	[IdPlayer] [int] IDENTITY NOT NULL,
 	[PlayerName] [varchar](30) NOT NULL,
 	[PlayerScore] [int]
@@ -25,12 +25,12 @@ CREATE TABLE [dbo].[Player](
 )
 GO
 
-CREATE TABLE [dbo].[Card](
+CREATE TABLE [dbo].[Cards](
 	[IdCard] [int] IDENTITY NOT NULL,
-	[CardName][varchar](40) NOT NULL,
+	[CardName][varchar](50) NOT NULL,
 	[CardAttack] [int] NOT NULL,
 	[CardDefense] [int] NOT NULL,
-	[CardImage] [VARBINARY] NOT NULL,
+	[CardImage] [VARBINARY](MAX) NOT NULL,
 	PRIMARY KEY ([IdCard])
 )
 GO
@@ -42,7 +42,7 @@ CREATE TABLE [dbo].[PlayerXCard](
 )
 GO
 
-CREATE TABLE [dbo].[Audit](
+CREATE TABLE [dbo].[Audits](
 	[IdAudit] [int] IDENTITY NOT NULL,
 	[Request][varchar](MAX) NOT NULL,
 	[Time] [datetime] NOT NULL,
@@ -55,22 +55,25 @@ GO
 ALTER TABLE	[PlayerXCard]
 	ADD CONSTRAINT [FK_PlayerXCard_Card]
 	FOREIGN KEY ([IdCard]) 
-	REFERENCES [Card] ([IdCard])
+	REFERENCES [Cards] ([IdCard])
 GO
 
 ALTER TABLE	[PlayerXCard]
 	ADD CONSTRAINT [FK_PlayerXCard_Player]
 	FOREIGN KEY ([IdPlayer]) 
-	REFERENCES [Player] ([IdPlayer])
+	REFERENCES [Players] ([IdPlayer])
 GO
 
- ALTER TABLE [Player] 
+ ALTER TABLE [Players] 
  ADD DEFAULT 0 
  FOR [PlayerScore]
  GO
 
  
- SELECT IdPlayer FROM Player;
+ SELECT IdPlayer FROM Players;
+
+ SELECT * FROM Players;
+
  SELECT TOP 1 [IdPlayer], [PlayerName], [PLayerScore] FROM Player ORDER BY IdPlayer DESC
 
 SELECT [IdPlayer], [PlayerName], [PlayerScore] FROM Player WHERE [IdPlayer] = (SELECT MAX([IdPlayer]) FROM Player)
@@ -92,10 +95,28 @@ GROUP BY
 
 	UPDATE Player SET PlayerName = 'UserPatched' , PlayerScore = '5' WHERE IdPLayer=3;
 
-INSERT [dbo].[Audit] ( [Request],[Time], [IdSession], [Exception]) 
+INSERT [dbo].[Audits] ( [Request],[Time], [IdSession], [Exception]) 
 VALUES ('127.0.0.1 - http://127.0.0.1:5000/users - POST - {''PlayerName'': ''User''}',
 convert(datetime,'2021-11-04 02:17:10'),'9b89b9a1-3d47-11ec-8371-cc483a4ec252','None')
 
-Select * from [Audit]
+Select * from [Audits]
 
+
+
+CREATE TABLE [dbo].[Cards](
+	[IdCard] [int] IDENTITY NOT NULL,
+	[CardName][varchar](50) NOT NULL,
+	[CardAttack] [int] NOT NULL,
+	[CardDefense] [int] NOT NULL,
+	[CardImage] [VARBINARY](MAX) NOT NULL,
+	PRIMARY KEY ([IdCard])
+)
+GO
+INSERT INTO [Cards] ( [CardName],[CardAttack],[CardDefense],[CardImage])
+SELECT 'CardName', 5, 9, BulkColumn
+	 FROM OPENROWSET(BULK 'C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\card.png', SINGLE_BLOB)as image;
+
+
+
+SELECT * from Cards
 

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db">
+    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="Updates:&#10;-PEP8 improved">
+      <change afterPath="$PROJECT_DIR$/repositories/audit_repository.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/audit_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Flask_lab.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Flask_lab.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DDL.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DDL.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/json/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/json/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/card_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/card_repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repositories/sql/player_sql.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/sql/player_sql.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/card_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/card_services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636016425520</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Updates:&#10;-PEP8 improved">
+      <created>1636018396764</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1636018396764</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -136,10 +150,48 @@
     <MESSAGE value="First implementation of database in all player methods" />
     <MESSAGE value="Branch features/db/row created" />
     <MESSAGE value="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db" />
+    <MESSAGE value="Updates:&#10;-PEP8 improved" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates:&#10;-PEP8 improved" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/configuration/db_connect.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/repositories/player_repository.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

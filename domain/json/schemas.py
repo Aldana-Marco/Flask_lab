@@ -12,10 +12,11 @@ class PlayerSchema(Schema):
 
 
 class CardSchema(Schema):
-    id = fields.Int(required=True)
-    name = fields.Str(required=True)
-    attack = fields.Int(required=True)
-    defense = fields.Int(required=True)
+    IdCard = fields.Int(required=True)
+    CardName = fields.Str(required=True)
+    CardAttack = fields.Int(required=True)
+    CardDefense = fields.Int(required=True)
+    CardImage = fields.Str(required=True)
 
 
 class ParameterLoadSchema(Schema):

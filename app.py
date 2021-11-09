@@ -2,17 +2,16 @@
 Main app where we make inputs and outputs with the user, all by method calls
 """
 # imports---------------------------------------------------------------------------------------------------------------
-import datetime
-import uuid
-from flask import Flask, jsonify, request, g
-from sqlalchemy.orm import Session
+from ast import literal_eval
+import re
 
-import services.player_services as player_service
-from configuration.db_connect import database_connection_alchemy
+from flask import Flask, jsonify, request
+
+from services.player_services import *
+from services.card_services import *
 from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
 from domain.models import parameter_load
-from repositories.sql.player_sql import SQL_INSERT_AUDIT, SQL_UPDATE_AUDIT_STATUS
-from services import card_services
+from services.audit_services import initialize_db_and_audit, finalize_db_and_audit
 
 # Global Variables and Cons---------------------------------------------------------------------------------------------
 app = Flask(__name__)
@@ -27,53 +26,32 @@ parameter_schema = ParameterLoadSchema()
 @app.before_request
 def before_request_func():
     print("Initializing request!")
-    # declare request details
-    request_details = str(request.remote_addr) + " - " + str(request.url) + " - " + str(request.method) + " - " \
-                      + str(request.get_json())
-    request_details = request_details.replace("'", "''")  # to avoid errors by ' in database insert
-    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    g.id_session = uuid.uuid1()
-    g.status = "Requested"
-    # create a log in database
-    g.db_connection = Session(database_connection_alchemy())
-    g.db_connection.execute(SQL_INSERT_AUDIT.format(request_details, time, g.id_session, g.status))
-    g.db_connection.commit()
-    print("Request is running...")
+    initialize_db_and_audit()
 
 
 @app.teardown_request
 def teardown_request_func(error):
-    # update status in database log
-    if error:
-        g.status = str(error).replace("'", "''")  # to avoid errors by ' in database insert
-        print(str(error))
-    else:
-        g.status = "Done!"
-    g.db_connection.execute(SQL_UPDATE_AUDIT_STATUS.format(g.status, g.id_session))
-    g.db_connection.commit()
-    print("closing database...")
-    if getattr(g, "db_connection", None):
-        g.db_connection.close()
-        print("closing program...")
+    finalize_db_and_audit(error)
+    print("closing request...")
 
 
 # Player Request Methods------------------------------------------------------------------------------------------------
 @app.route("/users", methods=["POST"])
 def _post_player():
     player = PlayerSchema(partial=('IdPlayer', 'PlayerScore')).load(request.get_json())
-    player_query = player_service.create_player(player.get("PlayerName"))
+    player_query = create_player(player.get("PlayerName"))
     return jsonify(player_schema.dump(player_query, many=True))
 
 
 @app.route("/users", methods=["GET"])
 def _get_players():
-    player_list = player_service.get_players()
+    player_list = get_players()
     return jsonify(player_schema.dump(player_list, many=True))
 
 
 @app.route("/users/<int:player_id>", methods=["GET"])
 def _get_player_by_id(player_id):
-    player_query = player_service.get_player_by_id(player_id)
+    player_query = get_player_by_id(player_id)
     player_list = player_schema.dump(player_query)
     if player_list:
         return jsonify(player_schema.dump(player_list, many=True))
@@ -84,7 +62,7 @@ def _get_player_by_id(player_id):
 @app.route("/users/<int:player_id>", methods=["PATCH"])
 def _patch_player_by_id(player_id):
     parameters = parameter_schema.load(request.get_json(), many=True)
-    player_query = player_service.patch_player(parameters, player_id)
+    player_query = patch_player(parameters, player_id)
     player = player_schema.dump(player_query)
     if player:
         return jsonify(player_schema.dump(player, many=True))
@@ -94,7 +72,7 @@ def _patch_player_by_id(player_id):
 
 @app.route("/users/<int:player_id>", methods=["DELETE"])
 def _delete_player_by_id(player_id):  # pending because get_player_by_id
-    player_query = player_service.delete_player_by_id(player_id)
+    player_query = delete_player_by_id(player_id)
     player = player_schema.dump(player_query)
     if player:
         return jsonify(player_schema.dump(player, many=True))
@@ -105,14 +83,18 @@ def _delete_player_by_id(player_id):  # pending because get_player_by_id
 # Cards  Request methods------------------------------------------------------------------------------------------------
 @app.route("/cards", methods=["POST"])
 def _post_card():
-    card = card_schema.load(request.get_json())
-    card = card_services.create_card(card.get("name"), card.get("attack"), card.get("defense"))
-    return jsonify(card_schema.dump(card))
+    card = CardSchema(partial=('IdCard', 'CardImage')).load(request.get_json())
+    card_query = create_card(card.get("CardName"), card.get("CardAttack"), card.get("CardDefense"), card.get("CardImage"))
+    return jsonify(card_schema.dump(card_query, many=True))
+
+    # card = card_schema.load(request.get_json())
+    # card = create_card(card.get("name"), card.get("attack"), card.get("defense"))
+    # return jsonify(card_schema.dump(card))
 
 
 @app.route("/cards", methods=["GET"])
 def _get_cards():
-    card_list = card_services.get_cards()
+    card_list = get_cards()
     cards = []
     for card in card_list:
         card_to_dict = card_schema.dump(card)
@@ -122,7 +104,7 @@ def _get_cards():
 
 @app.route("/cards/<int:card_id>", methods=["GET"])
 def _get_card(card_id):
-    card = card_services.get_card_by_id(card_id)
+    card = get_card_by_id(card_id)
     return jsonify(card_schema.dump(card))
 
 
@@ -133,14 +115,14 @@ def _patch_card_by_id(card_id):
     for parameter in parameters:
         parameter_obj = parameter_load(parameter)
         parameter_list.append(parameter_obj)
-    card_services.patch_card(parameter_list, card_id)
-    card = card_services.get_card_by_id(card_id)
+    patch_card(parameter_list, card_id)
+    card = get_card_by_id(card_id)
     return jsonify(card_schema.dump(card))
 
 
 @app.route("/cards/<int:card_id>", methods=["DELETE"])
 def _delete_card_by_id(card_id):
-    card = card_services.delete_card(card_id)
+    card = delete_card(card_id)
     if card != 'User not found':
         return jsonify(card_schema.dump(card))
     else:
