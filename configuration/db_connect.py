@@ -13,5 +13,4 @@ def database_connection_alchemy():
 
 def init_database():
     metadata.create_all(g.engine)
-    create_players(["julio", "Juan", "pepe", "jose", "Mario", "Ivan", "Maria", "Martha", "Johana", "Julia", "Fernanda"])
-#    select_player_by_id
+    #create_players(["julio", "Juan", "pepe", "jose", "Mario", "Ivan", "Maria", "Martha", "Johana", "Julia", "Fernanda"])

@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="MySQL added">
-      <change afterPath="$PROJECT_DIR$/repositories/db_models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repositories/db_models/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="ORM added">
       <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/card_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/card_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/card_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/card_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636501356577</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="ORM added">
+      <created>1636591730144</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1636591730144</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -155,16 +154,12 @@
     <MESSAGE value="Updates:&#10;-database management for players by SQLAlchemy implemented&#10;-error register by an Audit table in db" />
     <MESSAGE value="Updates:&#10;-PEP8 improved" />
     <MESSAGE value="MySQL added" />
-    <option name="LAST_COMMIT_MESSAGE" value="MySQL added" />
+    <MESSAGE value="ORM added" />
+    <option name="LAST_COMMIT_MESSAGE" value="ORM added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
-          <line>13</line>
-          <option name="timeStamp" value="94" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
           <line>22</line>
