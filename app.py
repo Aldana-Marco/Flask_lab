@@ -7,6 +7,7 @@ import re
 
 from flask import Flask, jsonify, request
 
+from configuration.db_connect import init_database, database_connection_alchemy
 from services.player_services import *
 from services.card_services import *
 from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
@@ -16,13 +17,19 @@ from services.audit_services import initialize_db_and_audit, finalize_db_and_aud
 # Global Variables and Cons---------------------------------------------------------------------------------------------
 app = Flask(__name__)
 app.debug = True
+
 # initializing objects--------------------------------------------------------------------------------------------------
 player_schema = PlayerSchema()
 card_schema = CardSchema()
 parameter_schema = ParameterLoadSchema()
+with app.app_context():
+    database_connection_alchemy()
+    init_database()
 
 
 # Player Before/After Methods-------------------------------------------------------------------------------------------
+
+
 @app.before_request
 def before_request_func():
     print("Initializing request!")
@@ -84,12 +91,9 @@ def _delete_player_by_id(player_id):  # pending because get_player_by_id
 @app.route("/cards", methods=["POST"])
 def _post_card():
     card = CardSchema(partial=('IdCard', 'CardImage')).load(request.get_json())
-    card_query = create_card(card.get("CardName"), card.get("CardAttack"), card.get("CardDefense"), card.get("CardImage"))
+    card_query = create_card(card.get("CardName"), card.get("CardAttack"), card.get("CardDefense"),
+                             card.get("CardImage"))
     return jsonify(card_schema.dump(card_query, many=True))
-
-    # card = card_schema.load(request.get_json())
-    # card = create_card(card.get("name"), card.get("attack"), card.get("defense"))
-    # return jsonify(card_schema.dump(card))
 
 
 @app.route("/cards", methods=["GET"])
@@ -103,30 +107,34 @@ def _get_cards():
 
 
 @app.route("/cards/<int:card_id>", methods=["GET"])
-def _get_card(card_id):
-    card = get_card_by_id(card_id)
-    return jsonify(card_schema.dump(card))
+def _get_card_by_id(card_id):
+    card_query = get_card_by_id(card_id)
+    card_list = card_schema.dump(card_query)
+    if card_list:
+        return jsonify(card_schema.dump(card_list, many=True))
+    else:
+        return jsonify(card_query)
 
 
 @app.route("/cards/<int:card_id>", methods=["PATCH"])
 def _patch_card_by_id(card_id):
     parameters = parameter_schema.load(request.get_json(), many=True)
-    parameter_list = []
-    for parameter in parameters:
-        parameter_obj = parameter_load(parameter)
-        parameter_list.append(parameter_obj)
-    patch_card(parameter_list, card_id)
-    card = get_card_by_id(card_id)
-    return jsonify(card_schema.dump(card))
+    card_query = patch_card(parameters, card_id)
+    card = card_schema.dump(card_query)
+    if card:
+        return jsonify(card_schema.dump(card, many=True))
+    else:
+        return jsonify(card_query)
 
 
 @app.route("/cards/<int:card_id>", methods=["DELETE"])
 def _delete_card_by_id(card_id):
-    card = delete_card(card_id)
-    if card != 'User not found':
-        return jsonify(card_schema.dump(card))
+    card_query = delete_card_by_id(card_id)
+    card = card_schema.dump(card_query)
+    if card:
+        return jsonify(card_schema.dump(card, many=True))
     else:
-        return jsonify({"Status": "Card not found"})
+        return jsonify(card_query)
 
 
 # Start-----------------------------------------------------------------------------------------------------------------

@@ -1,12 +1,13 @@
 from flask import g
+from sqlalchemy import text, select
 from sqlalchemy.orm import Session
 
+from repositories.db_models.models import players_table
 from repositories.sql.player_sql import *
 from domain.json.schemas import PlayerSchema
 
 
 class PlayerRepository:
-    players = []
 
     def _query(self, sql_request: str, commit_required: bool, return_required: bool):
         with g.engine.begin() as connection:
@@ -23,27 +24,28 @@ class PlayerRepository:
                 return players
 
     def insert_player(self, name: str, score: int):
-        self._query(SQL_INSERT_PLAYER.format(name, score), True, False)
-        return self._query(SQL_SELECT_MAX_ID_PLAYER, False, True)
+        orm_query = players_table.insert().values(PlayerName=name)
+        self._query(orm_query, True, False)
+        orm_query = players_table.select().where(text("IdPlayer=(SELECT MAX(IdPlayer) FROM Players)"))
+        return self._query(orm_query, False, True)
 
     def select_all_players(self):
-        return self._query(SQL_SELECT_ALL, False, True)
+        orm_query = players_table.select()
+        players = self._query(orm_query, False, True)
+        return players
 
     def select_player_by_id(self, player_id: int):
-        return self._query(SQL_SELECT_PLAYER.format(player_id), False, True)
+        orm_query = select([players_table]).where(players_table.c.IdPlayer == player_id)
+        return self._query(orm_query, False, True)
 
     def update_player_score(self, parameter_dict: dict, id_player: int):
-        new_player_parameters = []
-        for parameter, value in parameter_dict.items():
-            if parameter == "PlayerName" or parameter == "PlayerScore":
-                new_player_parameters.append(f"{parameter} = '{value}'")
-        self._query(f"UPDATE Players SET {' , '.join(new_player_parameters)} WHERE IdPLayer={id_player};", True, False)
+        orm_query = players_table.update(). \
+        where(players_table.c.IdPlayer == id_player). \
+        values(parameter_dict)
+        self._query(orm_query, True, False)
         return self.select_player_by_id(id_player)
 
     def delete_player(self, id_player: int):
-        query_player_found = self.select_player_by_id(id_player)
-        if query_player_found:
-            self._query(SQL_DELETE_PLAYER.format(id_player), True, False)
-            return query_player_found
-        else:
-            return "Player not found"
+        orm_query = players_table.delete().where(players_table.c.IdPlayer == id_player)
+        self._query(orm_query, True, False)
+        return "Player deleted:"

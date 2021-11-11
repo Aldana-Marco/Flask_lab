@@ -9,12 +9,17 @@ def create_player(name: str):
     return repository.PlayerRepository().insert_player(name, 0)
 
 
+
 def get_players():
     return repository.PlayerRepository().select_all_players()
 
 
 def get_player_by_id(player_id: int):
-    return repository.PlayerRepository().select_player_by_id(player_id)
+    response =  repository.PlayerRepository().select_player_by_id(player_id)
+    if response:
+        return response
+    else:
+        return "Player not found"
 
 
 def patch_player(attribute, player_id):
@@ -38,6 +43,6 @@ def delete_player_by_id(player_id: int):
     response = get_player_by_id(player_id)
     if response != "Player not found":
         player = repository.PlayerRepository().delete_player(player_id)
-        return player
+        return player,response
     else:
         return response

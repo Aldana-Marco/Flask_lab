@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import repositories.card_repository as repository
 from domain.json.schemas import CardSchema
+from repositories.sql.player_sql import CARD_PROPERTIES
 
 card_repo = repository.CardRepository()
 
@@ -10,29 +11,38 @@ def create_card(name: str, attack:int, defense:int, image):
 
 
 def get_cards():
-    return repository.CardRepository.cards
+    return repository.CardRepository().select_all_cards()
 
 
 def get_card_by_id(card_id: int):
-    for card in repository.CardRepository.cards:
-        if card_id == card.id:
-            return card
+    response=repository.CardRepository().select_card_by_id(card_id)
+    if response:
+        return response
+    else:
+        return "Card not found"
 
 
-def patch_card(attribute, id):
-    new_card = {element.attribute: element.value for element in attribute if element.attribute == "name"
-                or element.attribute == "attack" or element.attribute == "defense"}
-    for index, card in enumerate(repository.CardRepository.cards):
-        if id == card.id:
-            repository.CardRepository.cards[index] = Card(card.id, new_card.get("name"), new_card.get("attack"),
-                                                          new_card.get("defense"))
-            new_card = get_card_by_id(id)
-    return new_card
+def patch_card(attribute, card_id):
+    new_card = {
+        element["attribute"]: element["value"]
+        for element in attribute
+        if element["attribute"] in CARD_PROPERTIES
+    }
+    new_card["IdCard"] = card_id
 
+    try:
+        CardSchema().load(new_card, partial="IdCard")
+    except Exception as ex:
+        return "Bad Request, input data not valid... " + str(ex)
 
-def delete_card(card_id: int):
-    for index, card in enumerate(repository.CardRepository.cards):
-        if card.id == card_id:
-            del repository.CardRepository.cards[index]
-            return card
-    return 'User not found'
+    repository.CardRepository().update_card(new_card, card_id)
+    return get_card_by_id(card_id)
+
+def delete_card_by_id(card_id: int):
+    response = get_card_by_id(card_id)
+    if response != "Card not found":
+        card = repository.CardRepository().delete_card(card_id)
+        return card,response
+    else:
+        return response
+

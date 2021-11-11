@@ -1,33 +1,17 @@
-import mysql.connector
-import pymysql
-import pyodbc
-
-from sqlalchemy import create_engine
-
-from sqlalchemy.engine import URL
+from sqlalchemy import create_engine, select, insert
 from flask import g
-from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import Session
 
-from configuration.constants import SERVER, USER, PASSWORD, DB, PORT
+from configuration.constants import SERVER, USER, PASSWORD, DB
+from repositories.db_models.models import metadata, players_table, create_players
 
 
 def database_connection_alchemy():
     if not getattr(g, "db_connection", None):
-        g.engine=create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{SERVER}/{DB}?charset=utf8mb4", echo=True)
+        g.engine = create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{SERVER}/{DB}?charset=utf8mb4", echo=True)
 
-    #connection = pymysql.connect(
-    #    host=SERVER,
-    #    user=USER,
-    #    password=PASSWORD,
-    #    db=DB
-    #)
-    #g.db_connection = connection.cursor()
-    #return g.db_connection
-    #url_credentials = f"DRIVER={{ODBC Driver 17 for SQL server}};SERVER={SERVER};DATABASE={DB};UID={USER};" \
-    #                  f"PWD={PASSWORD}"
-    #url = URL.create("mssql+pyodbc", query={"odbc_connect": url_credentials})
-    #if not getattr(g, "db_connection", None):
-    #    g.db_connection = create_engine(url, echo=True)
-    #return g.db_connection
-    #
+
+def init_database():
+    metadata.create_all(g.engine)
+    create_players(["julio", "Juan", "pepe", "jose", "Mario", "Ivan", "Maria", "Martha", "Johana", "Julia", "Fernanda"])
+#    select_player_by_id
