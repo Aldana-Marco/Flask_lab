@@ -2,9 +2,7 @@
 Main app where we make inputs and outputs with the user, all by method calls
 """
 # ---------------------------------------------------------------------------------------------------------------Imports
-import flask.wrappers
-from flask import Flask, jsonify, request, session, g
-from http import HTTPStatus
+from flask import Flask, jsonify, request
 
 from configuration.db_connect import init_database, database_connection_alchemy
 from services.player_services import *

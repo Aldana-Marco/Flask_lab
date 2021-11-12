@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="ORM added">
-      <change afterPath="$PROJECT_DIR$/repositories/db_models/sql_constants.py" afterDir="false" />
+    <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="ORM added, and error handlings">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configuration/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/constants.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/json/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/json/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/domain/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/audit_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/audit_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/card_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/card_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/db_models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/db_models/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/sql/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/repositories/sql/player_sql.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/audit_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/audit_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/card_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/card_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_users.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636591806288</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="ORM added, and error handlings">
+      <created>1636681730929</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1636681730929</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,7 +193,8 @@
     <MESSAGE value="Updates:&#10;-PEP8 improved" />
     <MESSAGE value="MySQL added" />
     <MESSAGE value="ORM added" />
-    <option name="LAST_COMMIT_MESSAGE" value="ORM added" />
+    <MESSAGE value="ORM added, and error handlings" />
+    <option name="LAST_COMMIT_MESSAGE" value="ORM added, and error handlings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
