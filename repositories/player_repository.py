@@ -1,18 +1,24 @@
+"""
+
+"""
+# ---------------------------------------------------------------------------------------------------------------Imports
 from flask import g
 from sqlalchemy import text, select
 from sqlalchemy.orm import Session
 
+# --------------------------------------------------------------------------------------------------Initializing objects
 from repositories.db_models.models import players_table
-from repositories.sql.player_sql import *
-from domain.json.schemas import PlayerSchema
+from repositories.db_models.sql_constants import *
+from domain.schemas import PlayerSchema
 
 
+# ---------------------------------------------------------------------------------Class player for interactions with DB
 class PlayerRepository:
-
+    # ------------Generic method for SQL CRUD...Parameters(sql query,bool to commit or not,bool to return values or not)
     def _query(self, sql_request: str, commit_required: bool, return_required: bool):
-        with g.engine.begin() as connection:
-            sql_result = connection.execute(sql_request)
-            if commit_required:  # Execute only when we need to insert or modify a value in Database
+        with g.engine.begin() as connection:  # connection with db
+            sql_result = connection.execute(sql_request)  # send sql query
+            if commit_required:  # Execute if we need commit
                 session = Session(g.engine)
                 session.commit()
                 session.close()
@@ -23,7 +29,8 @@ class PlayerRepository:
                 players = PlayerSchema().load(players_list, many=True)
                 return players
 
-    def insert_player(self, name: str, score: int):
+    # -----------------------------------------------------------------------------methods for each query cards sentence
+    def insert_player(self, name: str):
         orm_query = players_table.insert().values(PlayerName=name)
         self._query(orm_query, True, False)
         orm_query = players_table.select().where(text("IdPlayer=(SELECT MAX(IdPlayer) FROM Players)"))
@@ -40,8 +47,8 @@ class PlayerRepository:
 
     def update_player_score(self, parameter_dict: dict, id_player: int):
         orm_query = players_table.update(). \
-        where(players_table.c.IdPlayer == id_player). \
-        values(parameter_dict)
+            where(players_table.c.IdPlayer == id_player). \
+            values(parameter_dict)
         self._query(orm_query, True, False)
         return self.select_player_by_id(id_player)
 
@@ -49,3 +56,4 @@ class PlayerRepository:
         orm_query = players_table.delete().where(players_table.c.IdPlayer == id_player)
         self._query(orm_query, True, False)
         return "Player deleted:"
+# ----------------------------------------------------------------------------------------------------------------------

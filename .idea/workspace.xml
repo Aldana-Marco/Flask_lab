@@ -2,7 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba8c1089-5bc8-40d1-9e71-ff06ac6f8878" name="Changes" comment="ORM added">
+      <change afterPath="$PROJECT_DIR$/repositories/db_models/sql_constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/configuration/db_connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/configuration/db_connect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/constants.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/json/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/json/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/audit_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/audit_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/card_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/card_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/db_models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/db_models/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/player_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repositories/player_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/sql/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repositories/sql/player_sql.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/audit_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/audit_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/card_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/card_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/player_services.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/player_services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_users.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,21 +55,25 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Platzi/platzi_flask/main.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\Flask_lab\repositories\sql" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\Flask_lab\repositories\db_models" />
+      <recent name="C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\Flask_lab\domain" />
+    </key>
   </component>
-  <component name="RunManager">
-    <configuration name="flask run" type="PythonConfigurationType" factoryName="Python">
+  <component name="RunManager" selected="Python.app.py">
+    <configuration name="app.py" type="PythonConfigurationType" factoryName="Python">
       <module name="Flask_lab" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1, FLASK_APP=flaskr" />
+        <env name="PYTHONUNBUFFERED" value="1, FLASK_APP=flaskr, FLASK_DEBUG=1 , FLASK_APP=main.py" />
       </envs>
       <option name="SDK_HOME" value="C:\Users\marco.aldana\Documents\Code\python\3pillarGlobal\Flask_lab\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -66,6 +89,25 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Flask run" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="flask run" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="flask run" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.app.py" />
+      <item itemvalue="Shell Script.Flask run" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -132,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636591730144</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="ORM added">
+      <created>1636591806288</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1636591806288</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -161,14 +210,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/repositories/card_repository.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="95" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/app.py</url>
-          <line>122</line>
-          <option name="timeStamp" value="101" />
+          <url>file://$PROJECT_DIR$/services/audit_services.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="124" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

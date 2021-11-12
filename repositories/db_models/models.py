@@ -1,8 +1,14 @@
+"""
+Create structures and initialize databases using SQLAlchemy libraries
+"""
+# ---------------------------------------------------------------------------------------------------------------Imports
 from flask import g
 from sqlalchemy import Table, Column, MetaData, Integer, String, LargeBinary, Text, DateTime, insert
 
+# ------------------------------------------------------------------------------------Initializing objects and variables
 metadata = MetaData()
 
+# -----------------------------------------------------------------------Declaring tables details for Database structure
 cards_table = Table("CARDS", metadata,
                     Column("IdCard", Integer, primary_key=True, autoincrement=True),
                     Column("CardName", String(50), nullable=False),
@@ -25,12 +31,11 @@ audits_table = Table("AUDITS", metadata,
                      Column("Status", Text, nullable=False)
                      )
 
+
+# --------------------------------------Method to create players sending just a list of names. JUST FOR TESTING PURPOSES
 def create_players(list_names: list):
     with g.engine.begin() as connection:
-        names=[]
+        names = []
         for name in list_names:
             names.append({'PlayerName': name})
         connection.execute(players_table.insert(), names)
-
-
-# card_insert=cards.insert().values(CardName = 'Ravi', Attack = 6, )

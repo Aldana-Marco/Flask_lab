@@ -1,10 +1,8 @@
 """
-
+Constants used in sql Operations
 """
 # -------------------------------------------------------------------------------------------------------------Constants
-SERVER = 'localhost'
-DB = 'cardsgame'
-USER = 'root'
-PASSWORD = 'Admin'
-PORT = 3306
+PLAYER_PROPERTIES = "IdPlayer", "PlayerName", "PlayerScore"
+AUDIT_PROPERTIES = "IdAudit", "Request", "Time", "IdSession", "Status"
+CARD_PROPERTIES = "IdCard", "CardName", "CardAttack", "CardDefense", "CardImage"
 # ----------------------------------------------------------------------------------------------------------------------

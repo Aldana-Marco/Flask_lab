@@ -1,24 +1,22 @@
 """
 Main app where we make inputs and outputs with the user, all by method calls
 """
-# imports---------------------------------------------------------------------------------------------------------------
-from ast import literal_eval
-import re
-
-from flask import Flask, jsonify, request
+# ---------------------------------------------------------------------------------------------------------------Imports
+import flask.wrappers
+from flask import Flask, jsonify, request, session, g
+from http import HTTPStatus
 
 from configuration.db_connect import init_database, database_connection_alchemy
 from services.player_services import *
 from services.card_services import *
-from domain.json.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
-from domain.models import parameter_load
+from domain.schemas import PlayerSchema, CardSchema, ParameterLoadSchema
 from services.audit_services import initialize_db_and_audit, finalize_db_and_audit
 
-# Global Variables and Cons---------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------Global Variables and Cons
 app = Flask(__name__)
-app.debug = True
+app.debug = False  # modify to develop in debug mode
 
-# initializing objects--------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------initializing objects
 player_schema = PlayerSchema()
 card_schema = CardSchema()
 parameter_schema = ParameterLoadSchema()
@@ -27,22 +25,28 @@ with app.app_context():
     init_database()
 
 
-# Player Before/After Methods-------------------------------------------------------------------------------------------
-
-
+# --------------------------------------------------------------------------------------------Flask Before/After Methods
 @app.before_request
 def before_request_func():
     print("Initializing request!")
     initialize_db_and_audit()
 
 
+@app.after_request
+def after_request(response):
+    finalize_db_and_audit(response.status)
+    print("closing request...")
+    return response
+
+
 @app.teardown_request
 def teardown_request_func(error):
-    finalize_db_and_audit(error)
-    print("closing request...")
+    if error:
+        finalize_db_and_audit(error)
+        print("closing request with server error...")
 
 
-# Player Request Methods------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------Player Request Methods
 @app.route("/users", methods=["POST"])
 def _post_player():
     player = PlayerSchema(partial=('IdPlayer', 'PlayerScore')).load(request.get_json())
@@ -61,7 +65,7 @@ def _get_player_by_id(player_id):
     player_query = get_player_by_id(player_id)
     player_list = player_schema.dump(player_query)
     if player_list:
-        return jsonify(player_schema.dump(player_list, many=True))
+        return jsonify(player_list)
     else:
         return jsonify(player_query)
 
@@ -78,16 +82,16 @@ def _patch_player_by_id(player_id):
 
 
 @app.route("/users/<int:player_id>", methods=["DELETE"])
-def _delete_player_by_id(player_id):  # pending because get_player_by_id
+def _delete_player_by_id(player_id):
     player_query = delete_player_by_id(player_id)
     player = player_schema.dump(player_query)
     if player:
-        return jsonify(player_schema.dump(player, many=True))
+        return jsonify(player)
     else:
         return jsonify(player_query)
 
 
-# Cards  Request methods------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------Cards Request methods
 @app.route("/cards", methods=["POST"])
 def _post_card():
     card = CardSchema(partial=('IdCard', 'CardImage')).load(request.get_json())
@@ -111,7 +115,7 @@ def _get_card_by_id(card_id):
     card_query = get_card_by_id(card_id)
     card_list = card_schema.dump(card_query)
     if card_list:
-        return jsonify(card_schema.dump(card_list, many=True))
+        return jsonify(card_list)
     else:
         return jsonify(card_query)
 
@@ -132,11 +136,12 @@ def _delete_card_by_id(card_id):
     card_query = delete_card_by_id(card_id)
     card = card_schema.dump(card_query)
     if card:
-        return jsonify(card_schema.dump(card, many=True))
+        return jsonify(card)
     else:
         return jsonify(card_query)
 
 
-# Start-----------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------Start
 if __name__ == '__main__':
     app.run()
+# ----------------------------------------------------------------------------------------------------------------------

@@ -1,10 +1,11 @@
 """
 This is a python document to work with schemas validation in marshmallow
 """
+# ---------------------------------------------------------------------------------------------------------------Imports
 from marshmallow import Schema, fields
 
 
-# Homework, see the "validate="
+# --------------------------------------------------------------------------parameters for each request structure needed
 class PlayerSchema(Schema):
     IdPlayer = fields.Int(required=True)
     PlayerName = fields.Str(required=True)
@@ -22,3 +23,4 @@ class CardSchema(Schema):
 class ParameterLoadSchema(Schema):
     attribute = fields.Str(required=True)
     value = fields.Field(required=True)
+# ----------------------------------------------------------------------------------------------------------------------
